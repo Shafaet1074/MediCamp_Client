@@ -28,7 +28,7 @@ const Dashboard = () => {
             Add A Camp
 
             </NavLink></li>
-          <li><NavLink to="/dashboard/reservation">
+          <li><NavLink to="/dashboard/managecamps">
           <GrSystem  className="text-2xl" />
             Manage Camps
             </NavLink></li>

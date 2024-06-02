@@ -34,7 +34,7 @@ const Navabr = () => {
     </ul>
   </div>
   <div className="navbar-end gap-5">
-   <Link to='dashboard'> <h2 className="text-xl font-bold px-2 py-1 bg-teal-700 text-white rounded-lg">DashBoard</h2></Link>
+   <Link to='dashboard/addcamps'> <h2 className="text-xl font-bold px-2 py-1 bg-teal-700 text-white rounded-lg">DashBoard</h2></Link>
 
    <Link to='login'> <a className="btn">Log In</a></Link>
    <Link to='signup'> <a className="btn">Sign Up</a></Link>
