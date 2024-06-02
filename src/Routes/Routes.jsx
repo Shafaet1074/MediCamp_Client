@@ -5,6 +5,8 @@ import AvailableCamps from "../Components/AvailableCamps/AvailableCamps";
 import JoinUs from "../Components/JoinUs/JoinUs";
 import Login from "../Pages/Authentication/Login/Login";
 import Signup from "../Pages/Authentication/Sigup/Signup";
+import Dashboard from "../Layouts/Dashboard";
+import AddCamps from "../Components/AdminDashboard/AddCamps/AddCamps";
 
 export const router = createBrowserRouter([
   {
@@ -36,5 +38,17 @@ export const router = createBrowserRouter([
 
     ]
 
+    },
+    {
+      path:'dashboard',
+      element:<Dashboard></Dashboard>,
+      children:[
+
+        {
+          path:'addcamps',
+          element:<AddCamps></AddCamps>
+
+        }
+      ]
     }
   ])
