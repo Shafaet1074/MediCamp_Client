@@ -19,7 +19,7 @@ const Dashboard = () => {
 				<span className="self-center text-3xl font-extrabold">Medi<span className="text-green-800 text-3xl font-extrabold">Camp</span></span>
 			</a>  
       <ul className="menu p-4 space-y-1 ">
-          <li><NavLink to="/dashboard/cart">
+          <li><NavLink to="/dashboard/organizers">
             <FaPerson className="text-2xl"></FaPerson>
             Organizer Profile.
             </NavLink></li>
