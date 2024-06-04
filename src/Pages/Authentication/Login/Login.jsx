@@ -1,5 +1,5 @@
 
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import img from '../../../assets/sign-in-page-flat-design-concept-illustration-icon-account-login-user-login-abstract-metaphor-can-use-for-landing-page-mobile-app-ui-posters-free-vector.jpg'
 import { useForm } from 'react-hook-form';
 import { useContext } from 'react';
@@ -7,6 +7,10 @@ import { AuthContext } from '../../../Components/Providers/AuthProviders';
 import Swal from 'sweetalert2';
 const Login = () => {
   const {LoginUser,googleLogIn}=useContext(AuthContext)
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
   const {
      register,
      formState: { errors },
@@ -19,7 +23,16 @@ const Login = () => {
      LoginUser(email,password)
      .then(result =>{
      console.log(result);
-     Swal.fire("Login done");
+     Swal.fire({
+      title: 'User Login Successful.',
+      showClass: {
+          popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+          popup: 'animate__animated animate__fadeOutUp'
+      }
+  });
+  navigate(from, { replace: true });
   })
 
   .catch(error=>{
@@ -36,7 +49,16 @@ const handleSocialLogin = async () =>{
    const result = await googleLogIn()
    
       console.log(result);
-      Swal.fire("Login done");
+      Swal.fire({
+        title: 'User Login Successful.',
+        showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+        },
+        hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+        }
+    });
+      navigate(from, { replace: true });
     }
 
  catch(error){

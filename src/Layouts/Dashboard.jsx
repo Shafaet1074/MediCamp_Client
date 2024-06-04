@@ -3,9 +3,12 @@ import { FaPerson } from "react-icons/fa6";
 import { NavLink, Outlet } from "react-router-dom";
 import { GrSystem } from "react-icons/gr";
 import { MdOutlineManageAccounts } from "react-icons/md";
+import { MdOutlinePayments } from "react-icons/md";
 
 
 const Dashboard = () => {
+  //TODO
+  const isAdmin=false;
   return (
    <div className="">
      <div className="flex  ">
@@ -19,7 +22,10 @@ const Dashboard = () => {
 				<span className="self-center text-3xl font-extrabold">Medi<span className="text-green-800 text-3xl font-extrabold">Camp</span></span>
 			</a>  
       <ul className="menu p-4 space-y-1 ">
-          <li><NavLink to="/dashboard/organizers">
+        {
+          isAdmin ?
+          <>
+            <li><NavLink to="/dashboard/organizers">
             <FaPerson className="text-2xl"></FaPerson>
             Organizer Profile.
             </NavLink></li>
@@ -36,6 +42,34 @@ const Dashboard = () => {
           <MdOutlineManageAccounts   className="text-2xl"  />
             Manage Registered Camps
             </NavLink></li>
+          
+          
+          </>
+          :
+          <>
+           <li><NavLink to="/dashboard/analytics">
+           <MdOutlineManageAccounts   className="text-2xl"  />
+            Analytics
+            </NavLink></li>
+          <li><NavLink to="/dashboard/participantprofile">
+          <FaPerson className="text-2xl"></FaPerson>
+            Participant Profile
+            </NavLink></li>
+          <li><NavLink to="/dashboard/registeredcamps">
+          <GrSystem  className="text-2xl" />
+          Registered Camps
+            </NavLink></li>
+          <li><NavLink to="/dashboard/paymenthistory
+">
+          <MdOutlinePayments  className="text-2xl"  />
+          Payment History
+
+            </NavLink></li>
+          
+          
+          </>
+        }
+         
           
 
          <div className="divider"> </div>

@@ -9,6 +9,7 @@ import Dashboard from "../Layouts/Dashboard";
 import AddCamps from "../Components/AdminDashboard/AddCamps/AddCamps";
 import ManageCamps from "../Components/AdminDashboard/ManageCamps.jsx/ManageCamps";
 import Organizers from "../Components/AdminDashboard/Organizers/Organizers";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -26,7 +27,7 @@ export const router = createBrowserRouter([
       },
       {
         path:'joinus',
-        element:<JoinUs></JoinUs>
+        element:<PrivateRoute><JoinUs></JoinUs></PrivateRoute>
       },
       {
         path:'login',
@@ -43,7 +44,7 @@ export const router = createBrowserRouter([
     },
     {
       path:'dashboard',
-      element:<Dashboard></Dashboard>,
+      element:<PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
       children:[
 
         {

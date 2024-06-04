@@ -79,6 +79,10 @@ const AddCamps = () => {
 </label>
     </div>
     </div>
+    <div className="md:flex md:gap-5 mb-8">
+    
+   
+    </div>
 
     <div className="md:flex md:gap-5 mb-8">
     <div className="md:w-1/2">
@@ -103,6 +107,8 @@ const AddCamps = () => {
 />
 </label>
     </div>
+
+
     </div>
 
 
@@ -121,8 +127,19 @@ const AddCamps = () => {
 
     
 
-    <div className="mb-8">
-    <div className="md:w-full">
+     <div className="md:w-full">
+     <label className="label">
+     <span className="label-text text-xl">Date & Time </span>
+     </label>
+    <label className="flex items-center gap-2">
+
+<input type="text" name="Date&Time" className="input input-bordered w-full " placeholder="Camp Fees" 
+{...register("Date&Time", { required: true })}
+/>
+</label>
+    </div>
+   <div className="mb-8">
+    <div className="md:w-1/2">
      <label className="label">
      <span className="label-text text-xl"> Description</span>
      </label>
@@ -134,6 +151,9 @@ const AddCamps = () => {
     </div>
    
     </div>
+
+    
+   
     
     
   
