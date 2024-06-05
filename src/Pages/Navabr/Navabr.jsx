@@ -1,8 +1,12 @@
+import { useContext } from "react";
 import { FaBookMedical } from "react-icons/fa";
 import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../../Components/Providers/AuthProviders";
 
 
 const Navabr = () => {
+  const {LogOut,user} = useContext(AuthContext)
+  console.log(user?.photoURL);
   return (
     <div className="navbar bg-[#92DCE5] rounded-lg">
   <div className="navbar-start">
@@ -36,8 +40,36 @@ const Navabr = () => {
   <div className="navbar-end gap-5">
    <Link to='dashboard'> <h2 className="text-xl font-bold px-2 py-1 bg-teal-700 text-white rounded-lg">DashBoard</h2></Link>
 
-   <Link to='login'> <a className="btn">Log In</a></Link>
+   
+
+
+   { user ?
+
+<div className="dropdown dropdown-hover">
+<div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+  <div className="w-10 rounded-full">
+    <img alt="Tailwind CSS Navbar component" src={user?.photoURL} />
+  </div>
+</div>
+<ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+  <li>
+  <p>{user?.displayName}</p>
+  </li>
+  <button onClick={LogOut}> <li><a>Logout</a></li></button>
+</ul>
+</div>
+   :
+ 
+   <>
+  <Link to='login'> <a className="btn">Log In</a></Link>
    <Link to='signup'> <a className="btn">Sign Up</a></Link>
+  
+ </>
+
+
+
+ }
+
     
   </div>
 </div>

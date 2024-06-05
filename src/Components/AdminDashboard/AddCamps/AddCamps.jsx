@@ -44,12 +44,12 @@ const AddCamps = () => {
     </div>
     <div className="md:w-1/2">
      <label className="label">
-     <span className="label-text text-xl">Image</span>
+     <span className="label-text text-xl">Date & Time </span>
      </label>
     <label className="flex items-center gap-2">
 
-<input type="text" name="Image" className="input input-bordered w-full " placeholder="Image" 
-{...register("Image", { required: true })}
+<input type="text" name="Date&Time" className="input input-bordered w-full " placeholder="Camp Fees" 
+{...register("Date&Time", { required: true })}
 />
 </label>
     </div>
@@ -127,17 +127,10 @@ const AddCamps = () => {
 
     
 
-     <div className="md:w-full">
-     <label className="label">
-     <span className="label-text text-xl">Date & Time </span>
-     </label>
-    <label className="flex items-center gap-2">
+     <div className="form-control w-full my-16">
+                        <input {...register('image', { required: true })} type="file" className="file-input w-full "  placeholder="Image"/>
+                    </div>
 
-<input type="text" name="Date&Time" className="input input-bordered w-full " placeholder="Camp Fees" 
-{...register("Date&Time", { required: true })}
-/>
-</label>
-    </div>
    <div className="mb-8">
     <div className="md:w-1/2">
      <label className="label">

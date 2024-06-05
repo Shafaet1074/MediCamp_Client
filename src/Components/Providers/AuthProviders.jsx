@@ -1,16 +1,21 @@
-import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, updateProfile } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import auth from "./firebase.config";
+import Swal from "sweetalert2";
+import useAxiosPublic, { axiosPublic } from "../../Hooks/USeAxiosPublic";
 
 
 export const AuthContext = createContext(null);
 const provider = new GoogleAuthProvider();
+
 provider.setCustomParameters({
   prompt: 'select_account'
 });
 const AuthProviders = ({children}) => {
   const [user,setUser] =useState(null);
   const[loading,setLoading]=useState(true);
+  const axiosPublic = useAxiosPublic();
+
 
   const LoginUser=(email,password) =>{
     setLoading(true);
@@ -37,16 +42,41 @@ const updateUserProfile =(name,image) =>{
   })
 }
 
+const LogOut = () =>{
+
+  setUser(null)
+  
+  signOut(auth)
+  .then(()=>{
+    Swal.fire("Log out done")
+
+  })
+}
+
 useEffect(() => {
   const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
-      console.log('current user', currentUser);
+      if(currentUser){
+          const userInfo={
+            email:currentUser.email
+          };
+          axiosPublic.post('/jwt',userInfo)
+          .then(res=>{
+            if(res.data.token){
+              localStorage.setItem('access-token', res.data.token);
+            }
+          })
+      }
+      else{
+        // do somethjing
+        localStorage.removeItem('access-token');
+      }
       setLoading(false);
   });
   return () => {
       return unsubscribe();
   }
-}, [])
+}, [axiosPublic])
 
   const userInfo={
    
@@ -55,7 +85,8 @@ useEffect(() => {
     LoginUser,
     SignUpUser,
     googleLogIn,
-    updateUserProfile
+    updateUserProfile,
+    LogOut
    };
 
   return (

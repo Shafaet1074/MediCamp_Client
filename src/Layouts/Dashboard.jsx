@@ -4,11 +4,12 @@ import { NavLink, Outlet } from "react-router-dom";
 import { GrSystem } from "react-icons/gr";
 import { MdOutlineManageAccounts } from "react-icons/md";
 import { MdOutlinePayments } from "react-icons/md";
+import useAdmin from "../Hooks/useAdmin";
 
 
 const Dashboard = () => {
   //TODO
-  const isAdmin=false;
+  const [isAdmin]=useAdmin();
   return (
    <div className="">
      <div className="flex  ">
