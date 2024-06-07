@@ -13,6 +13,7 @@ import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
 import Payment from "../Components/ParticapntDashboard/Payment/Payment";
 import RegisteredCamps from "../Components/ParticapntDashboard/RegisteredCamp/RegisteredCamps";
+import PaymentHistory from "../Components/ParticapntDashboard/PaymentHistory/PaymentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
       {
         path:'registeredcamps',
         element:<RegisteredCamps></RegisteredCamps>
+      },
+      {
+        path:'paymenthistory',
+        element:<PaymentHistory></PaymentHistory>
       },
       ]
     }

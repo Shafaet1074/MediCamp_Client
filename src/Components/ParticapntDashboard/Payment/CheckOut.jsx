@@ -4,6 +4,7 @@ import { Form } from "react-router-dom";
 import useCamps from "../../../Hooks/useCamps";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { AuthContext } from "../../Providers/AuthProviders";
+import Swal from "sweetalert2";
 
 
 const CheckOut = () => {
@@ -12,7 +13,7 @@ const CheckOut = () => {
   const [clientSecret, setClientSecret] = useState('')
   const stripe = useStripe();
   const elements = useElements();
-  const [hookcamps]=useCamps();
+  const [hookcamps,refetch]=useCamps();
   const axiosSecure = useAxiosSecure();
   const {user} =useContext(AuthContext);
   const [transactionId, setTransactionId] = useState('');
@@ -85,7 +86,7 @@ else {
           // now save the payment in the database
           const payment = {
               email: user.email,
-              name:user.name,
+              ParticipantName:user.displayName,
               price: totalPrice,
               transactionId: paymentIntent.id,
               date: new Date(), // utc date convert. use moment js to 
@@ -102,11 +103,11 @@ else {
               Swal.fire({
                   position: "top-end",
                   icon: "success",
-                  title: "Thank you for the taka paisa",
+                  title: "Thank you for Payment",
                   showConfirmButton: false,
                   timer: 1500
               });
-              navigate('/dashboard/paymentHistory')
+              // navigate('/dashboard/paymentHistory')
           }
 
       }
@@ -139,6 +140,9 @@ else {
 " type="submit" disabled={!stripe || !clientSecret}>
         Pay
       </button>
+
+      <p className="text-red-600">{error}</p>
+            {transactionId && <p className="text-green-600"> Your transaction id: {transactionId}</p>}
 
     </Form>
     </div>
