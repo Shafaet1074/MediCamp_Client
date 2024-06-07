@@ -1,26 +1,56 @@
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import useAxiosPublic from "../../../Hooks/USeAxiosPublic";
 
+
+const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+console.log(image_hosting_key);
+const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
 const AddCamps = () => {
+
+  const axiosPublic = useAxiosPublic();
 
   const axiosSecure=useAxiosSecure();
  
   const {
     register,
     formState: { errors },
-    handleSubmit
+    handleSubmit , reset
     } = useForm();
 
-    const onSubmit = (data) =>{
+    const onSubmit = async (data) =>{
+      const imageFile = { image: data.image[0] }
+        const res = await axiosPublic.post(image_hosting_api, imageFile, {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        });
+      console.log(res.data);
       console.log(data);
-      axiosSecure.post('/camps',data)
+      if (res.data.success) {
+        // now send the menu item data to the server with the image url
+        const CampsItem = {
+            campname: data.CampName,
+            DateTime: data.DateTime,
+            Description: data.Description,
+            campfees: data.campfees,
+            HealthcareProfessionalName: data.HealthcareProfessionalName,
+            Partcipantcount:data.Partcipantcount,
+            image: res.data.data.display_url,
+            Location:data.Location
+        }
+      
+
+      axiosSecure.post('/camps',CampsItem)
         .then(res=>{
           console.log(res.data);
+          reset();
           Swal.fire("Added Camps ");
     })
   
   }
+}
 
   return (
     <div className='p-20 min-h-screen bg-[#D6EDFF]'>
@@ -49,7 +79,7 @@ const AddCamps = () => {
     <label className="flex items-center gap-2">
 
 <input type="text" name="Date&Time" className="input input-bordered w-full " placeholder="Camp Fees" 
-{...register("Date&Time", { required: true })}
+{...register("DateTime", { required: true })}
 />
 </label>
     </div>
@@ -74,7 +104,7 @@ const AddCamps = () => {
     <label className="flex items-center gap-2">
 
 <input type="text" name="Location" className="input input-bordered w-full " placeholder="Location" 
-{...register("location", { required: true })}
+{...register("Location", { required: true })}
 />
 </label>
     </div>
@@ -139,7 +169,9 @@ const AddCamps = () => {
     <label className="flex items-center gap-2">
 
 {/* <input type="text" name="ShortDescription" className="input input-bordered w-full " placeholder="Short Description" /> */}
-<textarea name="Description" id="" cols="70"  rows="5"></textarea>
+<textarea name="Description" id="" cols="70"  rows="5"
+ {...register("Description", { required: true })}
+></textarea>
 </label>
     </div>
    
@@ -150,8 +182,8 @@ const AddCamps = () => {
     
     
   
-   <input type="submit" value="Add Camps"  className=" py-2 rounded-lg text-3xl font-bold bg-green-800 text-white hover:bg-emerald-900 hover:text-white mt-5 w-full"
-   {...register("Description", { required: true })}
+   <input type="submit" value="Add Camps"  className="w-full px-2 py-2 text-2xl font-bold bg-green-800 rounded-lg text-white"
+  
    />
    
 

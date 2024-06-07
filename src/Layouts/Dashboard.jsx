@@ -13,14 +13,14 @@ const Dashboard = () => {
   return (
    <div className="">
      <div className="flex  ">
-      <div className="w-96 lg:min-h-screen  bg-[#92DCE5] ">
+      <div className="lg:w-64  w-30  min-h-screen lg:min-h-screen  bg-[#92DCE5] ">
 
-      <a rel="noopener noreferrer" href="#" className="flex justify-center  lg:justify-start p-4 gap-2 mb-5 mt-5">
+      <a rel="noopener noreferrer" href="#" className="flex justify-center  lg:justify-start lg:p-4 p-2 gap-2 mb-5 mt-5">
 				<div className="flex items-center justify-center  ">
         <FaBookMedical className="text-3xl" />
 
 				</div>
-				<span className="self-center text-3xl font-extrabold">Medi<span className="text-green-800 text-3xl font-extrabold">Camp</span></span>
+				<span className="self-center lg:text-3xl  font-extrabold">Medi<span className="text-green-800 lg:text-3xl font-extrabold">Camp</span></span>
 			</a>  
       <ul className="menu p-4 space-y-1 ">
         {
@@ -86,7 +86,7 @@ const Dashboard = () => {
          </ul>
           
       </div>
-      <div className="flex-1 px-1">
+      <div className="flex-1 px-1 ">
          <Outlet></Outlet> 
       </div>
       

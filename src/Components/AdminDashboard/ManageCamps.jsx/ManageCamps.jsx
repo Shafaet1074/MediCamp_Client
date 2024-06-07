@@ -84,13 +84,13 @@ const ManageCamps = () => {
     const form = event.target;
     const updatedCamp = {
       _id: editCamp._id,
-      campName: form.campName.value,
+      campname: form.campname.value,
       image: form.image.value,
-      campFees: form.campFees.value,
-      location: form.location.value,
-      healthcareProfessional: form.healthcareProfessional.value,
-      participantCount: form.participantCount.value,
-      description: form.description.value
+      campfees: form.campfees.value,
+      Location: form.Location.value,
+      HealthcareProfessionalName: form.HealthcareProfessionalName.value,
+      ParticipantCount: form.ParticipantCount.value,
+      Description: form.Description.value
     };
     handleUpdate(updatedCamp);
   };
@@ -114,10 +114,10 @@ const ManageCamps = () => {
             {managecamps.map((camp, index) => (
               <tr key={camp._id}>
                 <th>{index + 1}</th>
-                <td>{camp.campName}</td>
-                <td>{camp.dateTime}</td>
-                <td>{camp.location}</td>
-                <td>{camp.healthcareProfessional}</td>
+                <td>{camp.campname}</td>
+                <td>{camp.DateTime}</td>
+                <td>{camp.Location}</td>
+                <td>{camp.HealthcareProfessionalName}</td>
                 <th>
                   <div className="flex flex-row gap-2">
                     <button onClick={() => handleDelete(camp._id)} className="btn btn-ghost btn-lg">
@@ -143,7 +143,7 @@ const ManageCamps = () => {
                 <label className="label">
                   <span className="label-text text-xl">Camp Name</span>
                 </label>
-                <input type="text" name="campName" className="input input-bordered w-full" defaultValue={editCamp.campName} />
+                <input type="text" name="campname" className="input input-bordered w-full" defaultValue={editCamp.campname} />
               </div>
               <div>
                 <label className="label">
@@ -155,31 +155,31 @@ const ManageCamps = () => {
                 <label className="label">
                   <span className="label-text text-xl">Camp Fees</span>
                 </label>
-                <input type="text" name="campFees" className="input input-bordered w-full" defaultValue={editCamp.campFees} />
+                <input type="text" name="campfees" className="input input-bordered w-full" defaultValue={editCamp.campfees} />
               </div>
               <div>
                 <label className="label">
                   <span className="label-text text-xl">Location</span>
                 </label>
-                <input type="text" name="location" className="input input-bordered w-full" defaultValue={editCamp.location} />
+                <input type="text" name="Location" className="input input-bordered w-full" defaultValue={editCamp.Location} />
               </div>
               <div>
                 <label className="label">
                   <span className="label-text text-xl">Healthcare Professional</span>
                 </label>
-                <input type="text" name="healthcareProfessional" className="input input-bordered w-full" defaultValue={editCamp.healthcareProfessional} />
+                <input type="text" name="HealthcareProfessionalName" className="input input-bordered w-full" defaultValue={editCamp.HealthcareProfessionalName} />
               </div>
               <div>
                 <label className="label">
                   <span className="label-text text-xl">Participant Count</span>
                 </label>
-                <input type="text" name="participantCount" className="input input-bordered w-full" defaultValue={editCamp.participantCount} />
+                <input type="text" name="ParticipantCount" className="input input-bordered w-full" defaultValue={editCamp.ParticipantCount} />
               </div>
               <div className="col-span-2">
                 <label className="label">
                   <span className="label-text text-xl">Description</span>
                 </label>
-                <textarea name="description" className="textarea textarea-bordered w-full" rows="5" defaultValue={editCamp.description}></textarea>
+                <textarea name="Description" className="textarea textarea-bordered w-full" rows="5" defaultValue={editCamp.Description}></textarea>
               </div>
               <div className="modal-action col-span-2">
                 <button type="button" className="btn" onClick={closeModal}>Close</button>

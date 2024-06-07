@@ -11,6 +11,8 @@ import ManageCamps from "../Components/AdminDashboard/ManageCamps.jsx/ManageCamp
 import Organizers from "../Components/AdminDashboard/Organizers/Organizers";
 import PrivateRoute from "./PrivateRoute";
 import AdminRoute from "./AdminRoute";
+import Payment from "../Components/ParticapntDashboard/Payment/Payment";
+import RegisteredCamps from "../Components/ParticapntDashboard/RegisteredCamp/RegisteredCamps";
 
 export const router = createBrowserRouter([
   {
@@ -62,7 +64,15 @@ export const router = createBrowserRouter([
           path:'organizers',
           element:<AdminRoute><Organizers></Organizers></AdminRoute>
 
-        }
+        },
+      {
+        path:'payment',
+        element:<Payment></Payment>
+      },
+      {
+        path:'registeredcamps',
+        element:<RegisteredCamps></RegisteredCamps>
+      },
       ]
     }
   ])
