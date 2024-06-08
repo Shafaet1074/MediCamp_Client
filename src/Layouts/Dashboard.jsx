@@ -39,7 +39,7 @@ const Dashboard = () => {
           <GrSystem  className="text-2xl" />
             Manage Camps
             </NavLink></li>
-          <li><NavLink to="/dashboard/review">
+          <li><NavLink to="/dashboard/manageregister">
           <MdOutlineManageAccounts   className="text-2xl"  />
             Manage Registered Camps
             </NavLink></li>

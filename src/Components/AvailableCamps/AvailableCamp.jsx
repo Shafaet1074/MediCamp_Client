@@ -18,6 +18,7 @@ const AvailableCamp = ({camp}) => {
   const axiosSecure = useAxiosSecure();
   const [, refetch] = useCamps();
   const [isAdmin]=useAdmin();
+  
 
   const handleAddToCart = () => {
 
@@ -35,7 +36,9 @@ const AvailableCamp = ({camp}) => {
           campfees: campfees,
           HealthcareProfessionalName: HealthcareProfessionalName,
           Partcipantcount:Partcipantcount,
-          Image:image
+          Image:image,
+          paymentStatus:'unpaid'
+          
           
       }
         axiosSecure.post('/carts', CampsItem)

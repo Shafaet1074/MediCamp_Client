@@ -14,6 +14,10 @@ import AdminRoute from "./AdminRoute";
 import Payment from "../Components/ParticapntDashboard/Payment/Payment";
 import RegisteredCamps from "../Components/ParticapntDashboard/RegisteredCamp/RegisteredCamps";
 import PaymentHistory from "../Components/ParticapntDashboard/PaymentHistory/PaymentHistory";
+import ParticipantProfile from "../Components/ParticapntDashboard/ParticipantProfile/ParticipantProfile";
+import UpdateProfile from "../Components/ParticapntDashboard/ParticipantProfile/UpdateProfile";
+import Analytics from "../Components/ParticapntDashboard/Analytics/Analytics";
+import ManageRegister from "../Components/AdminDashboard/ManageRegister/ManageRegister";
 
 export const router = createBrowserRouter([
   {
@@ -78,6 +82,22 @@ export const router = createBrowserRouter([
         path:'paymenthistory',
         element:<PaymentHistory></PaymentHistory>
       },
+      {
+        path:'participantprofile',
+        element:<ParticipantProfile></ParticipantProfile>
+      },
+      {
+        path:'updateprofile',
+        element:<UpdateProfile></UpdateProfile>
+      },
+      {
+        path:'analytics',
+        element:<Analytics></Analytics>
+      },
+      {
+        path:'manageregister',
+        element:<ManageRegister></ManageRegister>
+      }
       ]
     }
   ])
