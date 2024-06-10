@@ -1,125 +1,23 @@
 [
   {
-    "campName": "Summer Wellness Camp",
-    "image": "https://example.com/images/summer-wellness.jpg",
-    "campFees": 150.00,
-    "dateTime": "2024-06-15T09:00:00",
-    "location": "Central Park, NY",
-    "healthcareProfessional": "Dr. John Smith",
-    "participantCount": 100,
-    "description": "A holistic wellness camp focusing on physical and mental well-being.",
-    "joinCampButton": "https://example.com/join/summer-wellness"
+    "camp_name": "Heart Health Camp",
+    "doctor_name": "Dr. Emily Smith",
+    "specialization": "Cardiologist",
+    "location": "Campsite A",
+    "image_url":"https://i.ibb.co/SmHQ9tg/00f8e62a60bba40c1cbc109b2a8c559a.jpg"
   },
   {
-    "campName": "Yoga Retreat",
-    "image": "https://example.com/images/yoga-retreat.jpg",
-    "campFees": 200.00,
-    "dateTime": "2024-07-10T08:00:00",
-    "location": "Beachside Resort, CA",
-    "healthcareProfessional": "Dr. Jane Doe",
-    "participantCount": 50,
-    "description": "A serene yoga retreat by the beach for relaxation and rejuvenation.",
-    "joinCampButton": "https://example.com/join/yoga-retreat"
+    "camp_name": "Diabetes Management Camp",
+    "doctor_name": "Dr. Sarah Patel",
+    "specialization": "Endocrinologist",
+    "location": "Campsite B",
+    "image_url":"https://i.ibb.co/SmspPrW/pngtree-male-doctor-photo-png-image-11755264.png"
   },
   {
-    "campName": "Diabetes Management Camp",
-    "image": "https://example.com/images/diabetes-management.jpg",
-    "campFees": 100.00,
-    "dateTime": "2024-08-05T10:00:00",
-    "location": "Community Hall, TX",
-    "healthcareProfessional": "Dr. Alan Brown",
-    "participantCount": 80,
-    "description": "Educational sessions on managing diabetes with diet and exercise.",
-    "joinCampButton": "https://example.com/join/diabetes-management"
-  },
-  {
-    "campName": "Heart Health Camp",
-    "image": "https://example.com/images/heart-health.jpg",
-    "campFees": 120.00,
-    "dateTime": "2024-06-20T11:00:00",
-    "location": "Wellness Center, FL",
-    "healthcareProfessional": "Dr. Maria Garcia",
-    "participantCount": 70,
-    "description": "Workshops and activities for maintaining a healthy heart.",
-    "joinCampButton": "https://example.com/join/heart-health"
-  },
-  {
-    "campName": "Weight Loss Bootcamp",
-    "image": "https://example.com/images/weight-loss.jpg",
-    "campFees": 180.00,
-    "dateTime": "2024-07-25T07:00:00",
-    "location": "Fitness Center, NV",
-    "healthcareProfessional": "Dr. Liam Wilson",
-    "participantCount": 90,
-    "description": "Intense bootcamp focusing on weight loss and fitness.",
-    "joinCampButton": "https://example.com/join/weight-loss"
-  },
-  {
-    "campName": "Mental Health Awareness Camp",
-    "image": "https://example.com/images/mental-health.jpg",
-    "campFees": 75.00,
-    "dateTime": "2024-08-15T09:30:00",
-    "location": "Civic Auditorium, IL",
-    "healthcareProfessional": "Dr. Emily Martinez",
-    "participantCount": 120,
-    "description": "Sessions on mental health awareness and stress management.",
-    "joinCampButton": "https://example.com/join/mental-health"
-  },
-  {
-    "campName": "Pediatric Health Camp",
-    "image": "https://example.com/images/pediatric-health.jpg",
-    "campFees": 110.00,
-    "dateTime": "2024-06-25T10:00:00",
-    "location": "Children's Hospital, OH",
-    "healthcareProfessional": "Dr. James Johnson",
-    "participantCount": 60,
-    "description": "Health check-ups and fun activities for children.",
-    "joinCampButton": "https://example.com/join/pediatric-health"
-  },
-  {
-    "campName": "Senior Wellness Camp",
-    "image": "https://example.com/images/senior-wellness.jpg",
-    "campFees": 90.00,
-    "dateTime": "2024-07-05T09:00:00",
-    "location": "Senior Center, AZ",
-    "healthcareProfessional": "Dr. Sarah Lee",
-    "participantCount": 75,
-    "description": "Programs and activities for senior citizens to stay healthy and active.",
-    "joinCampButton": "https://example.com/join/senior-wellness"
-  },
-  {
-    "campName": "Sports Medicine Camp",
-    "image": "https://example.com/images/sports-medicine.jpg",
-    "campFees": 130.00,
-    "dateTime": "2024-08-10T08:00:00",
-    "location": "Athletic Complex, CO",
-    "healthcareProfessional": "Dr. Michael Davis",
-    "participantCount": 85,
-    "description": "Training and injury prevention for athletes of all levels.",
-    "joinCampButton": "https://example.com/join/sports-medicine"
-  },
-  {
-    "campName": "Nutrition Camp",
-    "image": "https://example.com/images/nutrition.jpg",
-    "campFees": 95.00,
-    "dateTime": "2024-06-30T10:30:00",
-    "location": "Health Academy, MA",
-    "healthcareProfessional": "Dr. Jessica Thompson",
-    "participantCount": 65,
-    "description": "Workshops on balanced diets and healthy eating habits.",
-    "joinCampButton": "https://example.com/join/nutrition"
-  },
-  {
-    "campName": "Family Health Camp",
-    "image": "https://example.com/images/family-health.jpg",
-    "campFees": 140.00,
-    "dateTime": "2024-07-15T09:00:00",
-    "location": "Community Park, GA",
-    "healthcareProfessional": "Dr. Christopher White",
-    "participantCount": 100,
-    "description": "Activities and health check-ups for the entire family.",
-    "joinCampButton": "https://example.com/join/family-health"
+    "camp_name": "Weight Loss Camp",
+    "doctor_name": "Dr. Emma Garcia",
+    "specialization": "Bariatric Surgeon",
+    "location": "Campsite C",
+    "image_url":"https://i.ibb.co/Lggdsm3/kisspng-physician-medicine-health-care-clinic-stock-photog-5ae62b0d404d95-4143814415250337412634.jpg"
   }
 ]
- 
-

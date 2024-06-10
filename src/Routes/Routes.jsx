@@ -18,6 +18,7 @@ import ParticipantProfile from "../Components/ParticapntDashboard/ParticipantPro
 import UpdateProfile from "../Components/ParticapntDashboard/ParticipantProfile/UpdateProfile";
 import Analytics from "../Components/ParticapntDashboard/Analytics/Analytics";
 import ManageRegister from "../Components/AdminDashboard/ManageRegister/ManageRegister";
+import Campdetails from "../Components/CampDetails/Campdetails";
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,11 @@ export const router = createBrowserRouter([
       {
         path:'/avalilablecamps',
         element:<AvailableCamps></AvailableCamps>,
+
+      },
+      {
+        path:'/campdetails/id/:id',
+        element:<Campdetails></Campdetails>,
 
       },
       {
@@ -87,7 +93,7 @@ export const router = createBrowserRouter([
         element:<ParticipantProfile></ParticipantProfile>
       },
       {
-        path:'updateprofile',
+        path:'updateprofile/:id',
         element:<UpdateProfile></UpdateProfile>
       },
       {

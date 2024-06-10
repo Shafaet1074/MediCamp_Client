@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import useAxiosPublic from "../../../Hooks/USeAxiosPublic";
+import { useContext } from "react";
+import { AuthContext } from "../../Providers/AuthProviders";
 
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
@@ -12,6 +14,7 @@ const AddCamps = () => {
   const axiosPublic = useAxiosPublic();
 
   const axiosSecure=useAxiosSecure();
+  const { user } = useContext(AuthContext);
  
   const {
     register,
@@ -38,7 +41,8 @@ const AddCamps = () => {
             HealthcareProfessionalName: data.HealthcareProfessionalName,
             Partcipantcount:data.Partcipantcount,
             image: res.data.data.display_url,
-            Location:data.Location
+            Location:data.Location,
+            email:user?.email
         }
       
 
@@ -53,10 +57,10 @@ const AddCamps = () => {
 }
 
   return (
-    <div className='p-20 min-h-screen bg-[#D6EDFF]'>
+    <div className='lg:p-20 p-2 min-h-screen bg-[#D6EDFF]'>
     <div className="min-h-screen shadow-2xl border-emerald-800 rounded-lg p-10 space-y-4 ">
   <div className="mb-10"> 
-  <h2 className="text-5xl text-black text-center font-bold  ">Add New  <span className="text-green-800">Medical Camp</span></h2>
+  <h2 className="lg:text-5xl text-xl text-black text-center font-bold  ">Add New  <span className="text-green-800">Medical Camp</span></h2>
   </div>
    <form onSubmit={handleSubmit(onSubmit)} >
    {/* form name and quantity row */}

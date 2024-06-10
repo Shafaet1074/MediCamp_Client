@@ -1,20 +1,33 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import useCamps from '../../../Hooks/useCamps';
+import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
 
 
 const Analytics = () => {
-  const [hookcamps, refetch] = useCamps();
+  const axiosSecure=useAxiosSecure();
+ 
+  const {data:camps=[]} =useQuery({
+    queryKey:['camps'],
+    queryFn:async ()=>{
+  const res=await axiosSecure.get('/camps');
+    
+      console.log(res.data);
+      return res.data
+    }
+    })
 
     // Transform the data to a format suitable for the chart
-    const chartData = hookcamps.map(camp => ({
-        campname: camp.campname,
+    const chartData = camps.map(camp => ({
+        campname: camp?.campname,
         fees: camp.campfees,
-        participants:camp.Partcipantcount
+        participants:camp.
+        Participantcount
  
     }));
 
-  console.log(hookcamps);  
+  console.log(camps);  
   console.log(chartData);
     return (
        <div>

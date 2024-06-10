@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import useCamps from "../../../Hooks/useCamps";
 import { AuthContext } from "../../Providers/AuthProviders";
@@ -8,12 +8,15 @@ import Swal from "sweetalert2";
 
 const RegisteredCamps = () => {
   const [hookcamps, refetch] = useCamps();
-  console.log(hookcamps);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCampId, setSelectedCampId] = useState(null);
+  const [feedback, setFeedback] = useState("");
+  const [rating, setRating] = useState(1);
+
   const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
 
   const handleDelete = (id) => {
-   
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -38,27 +41,50 @@ const RegisteredCamps = () => {
     });
   };
 
-  // const handlePayment = async (camp) => {
-  //   try {
-  //     const res = await axiosSecure.post('/create-payment-intent', { price: camp.campfees });
-  //     const { clientSecret } = res.data;
-
-  //     // Redirect to payment page with clientSecret and camp details
-  //     // Your payment logic here...
-
-  //   } catch (error) {
-  //     console.error("Error initiating payment:", error);
-  //   }
-  // };
-
   const handleFeedback = (campId) => {
-    // Redirect to feedback page or open a modal for feedback
+    setSelectedCampId(campId);
+    setShowModal(true);
   };
 
   const handleCancel = async (camp) => {
-    console.log(camp);
     if (camp.paymentStatus === "unpaid") {
       handleDelete(camp._id);
+    }
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setSelectedCampId(null);
+    setFeedback("");
+    setRating(1);
+  };
+
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+    console.log(hookcamps.campname);
+    try {
+      const res = await axiosSecure.post('/reviews', {
+        campId: selectedCampId,
+      
+        feedback,
+        rating,
+        user: user.displayName,
+        email: user.email,
+      });
+      if (res.data.insertedId) {
+        Swal.fire({
+          title: "Success!",
+          text: "Your feedback has been submitted.",
+          icon: "success",
+        });
+        handleModalClose();
+      }
+    } catch (error) {
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to submit feedback.",
+        icon: "error",
+      });
     }
   };
 
@@ -73,13 +99,8 @@ const RegisteredCamps = () => {
         </p>
       </div>
 
-      {/* <div className="text-2xl text-gray-600 font-bold space-y-2 pb-5 lg:flex lg:justify-evenly lg:items-center">
-        <p>Your Total Registered Items: {hookcamps.length}</p>
-        <p>Your Total Fees: BDT {hookcamps.reduce((total, item) => total + parseFloat(item.campfees), 0)}</p>
-      </div> */}
-
       <div className="overflow-x-auto lg:px-10 px-2">
-        <table className="table lg:w-full w-1/2 bg-green-600 text-xl text-white">
+        <table className="table lg:w-full w-1/2 bg-green-800 text-xl text-white">
           <thead>
             <tr className="text-2xl text-white">
               <th>#</th>
@@ -90,6 +111,7 @@ const RegisteredCamps = () => {
               <th>Payment Status</th>
               <th>Confirmation Status</th>
               <th>Action</th>
+              <th>Feedback</th>
             </tr>
           </thead>
           <tbody>
@@ -110,15 +132,18 @@ const RegisteredCamps = () => {
                 <td>{user.displayName}</td>
                 <td>
                   {camp.paymentStatus === "paid" ? (
-                    <button className="px-4 py-2 bg-green-700 rounded-lg btn-disabled text-white  font-bold">Paid</button>
+                    <button className="px-4 py-2 bg-green-700 rounded-lg btn-disabled text-white font-bold">
+                      Paid
+                    </button>
                   ) : (
                     <Link to={`/dashboard/payment?campId=${camp._id}`}>
-                    <button className="px-4 py-2 bg-green-500 rounded-lg  text-white font-bold">Pay</button>
-                  </Link>
-                  
+                      <button className="px-4 py-2 bg-green-500 rounded-lg text-white font-bold">
+                        Pay
+                      </button>
+                    </Link>
                   )}
                 </td>
-                <td>{camp.confirmationStatus}</td>
+                <td>{camp.confirmationStatus || 'pending'}</td>
                 <td>
                   <button
                     onClick={() => handleCancel(camp)}
@@ -127,8 +152,12 @@ const RegisteredCamps = () => {
                   >
                     <FaTrashAlt className="text-red-600" />
                   </button>
-                  {camp.paymentStatus === "paid" && camp.confirmationStatus === "Confirmed" && (
-                    <button onClick={() => handleFeedback(camp._id)} className="btn btn-info">Feedback</button>
+                </td>
+                <td>
+                  {camp.paymentStatus === "paid" && camp.confirmationStatus === "confirmed" && (
+                    <button onClick={() => handleFeedback(camp._id)} className="btn btn-info">
+                      Feedback
+                    </button>
                   )}
                 </td>
               </tr>
@@ -136,6 +165,54 @@ const RegisteredCamps = () => {
           </tbody>
         </table>
       </div>
+
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-1/3">
+            <h2 className="text-2xl font-bold mb-4">Submit Feedback</h2>
+            <form onSubmit={handleFeedbackSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="feedback">
+                  Feedback
+                </label>
+                <textarea
+                  id="feedback"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="rating">
+                  Rating
+                </label>
+                <select
+                  id="rating"
+                  className="w-full p-2 border border-gray-300 rounded"
+                  value={rating}
+                  onChange={(e) => setRating(Number(e.target.value))}
+                  required
+                >
+                  {[1, 2, 3, 4, 5].map((rate) => (
+                    <option key={rate} value={rate}>
+                      {rate}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex justify-end">
+                <button type="button" className="mr-4 bg-gray-500 text-white px-4 py-2 rounded" onClick={handleModalClose}>
+                  Cancel
+                </button>
+                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

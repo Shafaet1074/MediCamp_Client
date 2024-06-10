@@ -4,6 +4,7 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProviders";
 import Swal from "sweetalert2";
+import { useParams } from "react-router-dom";
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 console.log(image_hosting_key);
@@ -13,19 +14,21 @@ const UpdateProfile = () => {
   
 
 
-  const axiosPublic = useAxiosPublic();
   const axiosSecure=useAxiosSecure();
-  const { user } = useContext(AuthContext);
+
+  const { id } = useParams();
   const {
     register,
     formState: { errors },
     handleSubmit , reset
     } = useForm();
 
+    
     const handleUpdate = async (ProfileData) => {
       try {
-        const res = await axiosSecure.patch(`/users/${user?.email}`, ProfileData);
-  
+        const res = await axiosSecure.patch(`/carts/${id}`, ProfileData);
+        console.log('Response data:', res.data); // Log the entire response for inspection
+    
         if (res.data.modifiedCount > 0) {
           Swal.fire({
             position: 'top-end',
@@ -44,20 +47,16 @@ const UpdateProfile = () => {
     };
 
     const onSubmit = async (data) =>{
-      const imageFile = { image: data.image[0] }
-        const res = await axiosPublic.post(image_hosting_api, imageFile, {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
-        });
-      console.log(res.data);
+      
+     
       console.log(data);
-      if (res.data.success) {
+
+      reset();
+     
 
         const ProfileData = {
-          campname: data.Name,
-          image: res.data.data.display_url,
-          phonenumber:data.Phonenumber
+          age: data.Age,
+          phoneNumber:data.Phonenumber
       }
 
        await  handleUpdate(ProfileData);
@@ -67,7 +66,7 @@ const UpdateProfile = () => {
 
 
 
-      }
+      
 
 
     }
@@ -77,18 +76,22 @@ const UpdateProfile = () => {
   <div className="mb-10"> 
   <h2 className="text-5xl text-black text-center font-bold  ">Update  <span className="text-green-800">Your Profile </span></h2>
   </div>
-   <form onSubmit={handleSubmit(onSubmit)} >
+   <form
+
+    onSubmit={handleSubmit(onSubmit)} 
+    
+    >
    {/* form name and quantity row */}
 
    <div className="md:flex md:gap-5 mb-8">
     <div className="md:w-1/2">
      <label className="label">
-     <span className="label-text text-xl"> Name </span>
+     <span className="label-text text-xl"> Age </span>
      </label>
     <label className="flex items-center gap-2">
 
-<input type="text" name="Camp Name" className="input input-bordered w-full " placeholder="Name" 
-{...register("Name", { required: true })}
+<input type="number" name="Age" className="input input-bordered w-full " placeholder="Age" 
+{...register("Age", { required: true })}
 />
 </label>
     </div>
@@ -130,9 +133,9 @@ const UpdateProfile = () => {
 
     
 
-     <div className="form-control w-full my-16">
+     {/* <div className="form-control w-full my-16">
                         <input {...register('image', { required: true })} type="file" className="file-input w-full "  placeholder="Image"/>
-                    </div>
+                    </div> */}
 
 
 

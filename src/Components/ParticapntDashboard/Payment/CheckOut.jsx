@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 const CheckOut = () => {
   const [error, setError] = useState('');
   const [clientSecret, setClientSecret] = useState('');
+  const [loading, setLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosSecure();
@@ -50,28 +51,31 @@ const CheckOut = () => {
   // Handle form submission to process payment
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!stripe || !elements) {
+    if (!stripe || !elements || loading) {
       return;
     }
-
+  
+    setLoading(true);  // Set loading state to true
+  
     const card = elements.getElement(CardElement);
     if (card === null) {
+      setLoading(false);  // Reset loading state
       return;
     }
-
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
+  
+    const { error: createPaymentMethodError, paymentMethod } = await stripe.createPaymentMethod({
       type: 'card',
       card
     });
-
-    if (error) {
-      setError(error.message);
+  
+    if (createPaymentMethodError) {
+      setError(createPaymentMethodError.message);
+      setLoading(false);  // Reset loading state
       return;
     } else {
       setError('');
     }
-
+  
     const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: card,
@@ -81,15 +85,16 @@ const CheckOut = () => {
         }
       }
     });
-
+  
     if (confirmError) {
       setError(confirmError.message);
+      setLoading(false);  // Reset loading state
       return;
     }
-
+  
     if (paymentIntent.status === 'succeeded') {
       setTransactionId(paymentIntent.id);
-
+  
       // Prepare payment data
       const payment = {
         email: user.email,
@@ -100,18 +105,16 @@ const CheckOut = () => {
         campId: campId,
         CampName: camp.campname,
         CampFees: camp.campfees,
-        paymentStatus: "Completed", // or set the appropriate status
+        paymentStatus: "Completed",
       };
-
+  
       // Post payment data to the server
       try {
         const res = await axiosSecure.post('/payments', payment);
-        console.log(res.data.insertedId)
         if (res?.data?.insertedId) {
-          const paymentId = res.data.insertedId;
-
-          // Patch request to confirm payment
-          const confirmRes = await axiosSecure.patch(`/carts/${campId}`);
+          console.log(`Payment recorded with ID: ${res.data.insertedId}`);
+          const confirmRes = await axiosSecure.patch(`/carts/${campId}`, { paymentStatus: "paid" });
+          console.log(`Update response: ${JSON.stringify(confirmRes.data)}`);
           if (confirmRes.data?.modifiedCount > 0) {
             Swal.fire({
               position: "top-end",
@@ -127,8 +130,11 @@ const CheckOut = () => {
         console.error("Error posting payment data:", error);
       }
     }
+  
+    setLoading(false);  // Reset loading state
   };
 
+  
   return (
     <div>
       <Form className="border-2 p-20 bg-slate-200" onSubmit={handleSubmit}>
@@ -149,8 +155,8 @@ const CheckOut = () => {
           }}
         />
         <button className="py-2 px-6 rounded-lg text-3xl font-bold bg-green-800 text-white hover:bg-emerald-900 mt-5"
-          type="submit" disabled={!stripe || !clientSecret}>
-          Pay
+          type="submit" disabled={!stripe || !clientSecret || loading}>
+          {loading ? 'Processing...' : 'Pay'}
         </button>
         <p className="text-red-600">{error}</p>
         {transactionId && <p className="text-green-600">Your transaction id: {transactionId}</p>}

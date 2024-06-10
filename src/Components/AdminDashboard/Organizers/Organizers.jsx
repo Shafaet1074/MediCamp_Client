@@ -36,8 +36,8 @@ const Organizers = () => {
   };
 
   return (
-    <div className="bg-[#D6EDFF] p-10 min-h-screen">
-      <h2 className="text-5xl text-black text-center pb-10 font-bold">
+    <div className="bg-[#D6EDFF] lg:p-10 p-2 min-h-screen">
+      <h2 className="lg:text-5xl text-xl text-black lg:text-center lg:pb-10 p-5 font-bold">
         Manage Your <span className="text-green-800">Organizers Profile</span>
       </h2>
       <div className="overflow-x-auto">
@@ -59,7 +59,7 @@ const Organizers = () => {
                 <td>{organizer.email}</td>
                 <td>
                   {organizer.role === 'admin' ? (
-                    <h2 className="px-2 py-4 bg-green-500 rounded-lg">Admin</h2>
+                    <h2 className="px-2 py-4 bg-green-500 rounded-lg w-1/2 text-center">Admin</h2>
                   ) : (
                     <button
                       onClick={() => handleMakeAdmin(organizer)}
@@ -70,7 +70,7 @@ const Organizers = () => {
                   )}
                 </td>
                 <td>
-                  <div className="flex flex-row gap-2">
+                  <div className="flex flex-row justify-start gap-10">
                     <MdDelete />
                     <FaRegEdit />
                   </div>

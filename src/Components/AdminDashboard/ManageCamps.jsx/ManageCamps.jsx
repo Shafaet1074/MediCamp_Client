@@ -97,9 +97,9 @@ const ManageCamps = () => {
 
   return (
     <div className="bg-[#D6EDFF] p-10 min-h-screen">
-      <h2 className="text-5xl text-black text-center pb-10 font-bold">Manage Your <span className="text-green-800">Medical Camp</span></h2>
+      <h2 className="lg:text-5xl text-xl text-black text-center pb-10 font-bold">Manage Your <span className="text-green-800">Medical Camp</span></h2>
       <div className="overflow-x-auto">
-        <table className="table text-xl bg-green-800 text-white">
+        <table className="table text-xl bg-green-800 text-white rounded-lg">
           <thead className="text-white text-2xl">
             <tr>
               <th></th>

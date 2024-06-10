@@ -6,6 +6,7 @@ import { RouterProvider } from 'react-router-dom'
 import { router } from './Routes/Routes.jsx'
 import AuthProviders from './Components/Providers/AuthProviders.jsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import '@fortawesome/fontawesome-free/css/all.css';
 
 const queryClient = new QueryClient()
 // import {
@@ -18,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
    <AuthProviders>
    <QueryClientProvider client={queryClient}>
-   <div className='lg:px-10'>
+   <div className='lg:px-10 '>
   <RouterProvider router={router} />
   </div>
   </QueryClientProvider>
