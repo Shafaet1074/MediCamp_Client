@@ -59,7 +59,7 @@ const Organizers = () => {
                 <td>{organizer.email}</td>
                 <td>
                   {organizer.role === 'admin' ? (
-                    <h2 className="px-2 py-4 bg-green-500 rounded-lg w-1/2 text-center">Admin</h2>
+                    <h2 className="px-2 py-4 bg-green-500 rounded-lg  text-center">Admin</h2>
                   ) : (
                     <button
                       onClick={() => handleMakeAdmin(organizer)}
@@ -71,8 +71,8 @@ const Organizers = () => {
                 </td>
                 <td>
                   <div className="flex flex-row justify-start gap-10">
-                    <MdDelete />
-                    <FaRegEdit />
+                   <button className="text-red-400 lg:text-2xl "> <MdDelete /></button>
+                   <button className="text-green-400 lg:text-2xl "> <FaRegEdit /></button>
                   </div>
                 </td>
               </tr>

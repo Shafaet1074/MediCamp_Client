@@ -19,15 +19,18 @@ import UpdateProfile from "../Components/ParticapntDashboard/ParticipantProfile/
 import Analytics from "../Components/ParticapntDashboard/Analytics/Analytics";
 import ManageRegister from "../Components/AdminDashboard/ManageRegister/ManageRegister";
 import Campdetails from "../Components/CampDetails/Campdetails";
+import ErrorPage from "../Components/ErrorPage/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <Main></Main>,
+    errorElement:<ErrorPage></ErrorPage>,
     children: [
       {
           path: '/',
-          element: <Home></Home>
+          element: <Home></Home>,
+          errorElement:<ErrorPage></ErrorPage>,
       }, 
       {
         path:'/avalilablecamps',
@@ -59,6 +62,7 @@ export const router = createBrowserRouter([
     {
       path:'dashboard',
       element:<PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
+      errorElement:<ErrorPage></ErrorPage>,
       children:[
 
         {

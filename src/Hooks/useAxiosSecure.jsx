@@ -4,25 +4,22 @@ import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../Components/Providers/AuthProviders';
 
 export const axiosSecure = axios.create({
-  baseURL: 'http://localhost:5005', // Update with your backend URL
+  baseURL: 'https://medicamp-server-eosin.vercel.app', // Update with your backend URL
 });
 
 const useAxiosSecure = () => {
   const navigate= useNavigate();
   const {LogOut} = useContext(AuthContext)
-  axiosSecure.interceptors.request.use(
-    (config) => {
-      const token = localStorage.getItem('access-token');
-      console.log('Token retrieved:', token);
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+  axiosSecure.interceptors.request.use(function (config) {
+    const token = localStorage.getItem('access-token')
+    // console.log('request stopped by interceptors', token)
+    config.headers.authorization = `Bearer ${token}`;
+    return config;
+}, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+});
+
 
     axiosSecure.interceptors.response.use(function (response) {
       return response;

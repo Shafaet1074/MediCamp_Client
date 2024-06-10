@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export const axiosPublic = axios.create({
-  baseURL:'http://localhost:5005'
+  baseURL:'https://medicamp-server-eosin.vercel.app'
 })
 const useAxiosPublic = () => {
       return axiosPublic;

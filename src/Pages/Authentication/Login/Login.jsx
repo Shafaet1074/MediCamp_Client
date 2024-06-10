@@ -67,12 +67,12 @@ const handleSocialLogin = async () =>{
 }
 
   return (
-    <div className="flex gap-10 p-20">
-      <div className='w-1/2'>
+    <div className="lg:flex lg:gap-10  space-y-5 lg:p-20 p-5">
+      <div className=' lg:w-1/2'>
         <img src={img} alt="" />
       </div>
 
-      <div className="w-full max-w-md p-8 space-y-3 rounded-xl dark:bg-gray-50 dark:text-gray-800 border-2 border-[#92DCE5] shadow-fuchsia-200 shadow-xl">
+      <div className="lg:w-full max-w-md lg:p-8  p-2 space-y-3 rounded-xl dark:bg-gray-50 dark:text-gray-800 border-2 border-[#92DCE5] shadow-fuchsia-200 shadow-xl">
 	<h1 className="text-4xl font-bold text-center ">Log In</h1>
 	<form onSubmit={handleSubmit(onSubmit)} noValidate="" action="" className="space-y-6">
 		<div className="space-y-1 text-sm">
@@ -113,7 +113,7 @@ const handleSocialLogin = async () =>{
 		
 	</div>
 	<p className="text-xs text-center sm:px-6 dark:text-gray-600">Don't have an account?
-  <Link to='/sigup'> <a rel="noopener noreferrer" href="#" className="underline dark:text-gray-800">Sign Up</a></Link>
+  <Link to='/signup'> <a rel="noopener noreferrer" href="#" className="underline dark:text-gray-800">Sign Up</a></Link>
 	</p>
 </div>
     </div>

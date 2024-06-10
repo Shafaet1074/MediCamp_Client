@@ -69,8 +69,8 @@ const Navabr = () => {
    :
  
    <>
-  <Link to='login'> <a className="btn">Log In</a></Link>
-   <Link to='signup'> <a className="btn">Sign Up</a></Link>
+  <Link to='/login'> <a className="btn">Log In</a></Link>
+   <Link to='/signup'> <a className="btn">Sign Up</a></Link>
   
  </>
 
