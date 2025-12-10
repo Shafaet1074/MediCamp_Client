@@ -1,157 +1,149 @@
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useAxiosPublic from "../../../Hooks/USeAxiosPublic";
-import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import { useContext } from "react";
-import { AuthContext } from "../../Providers/AuthProviders";
 import Swal from "sweetalert2";
+import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import { useParams } from "react-router-dom";
 
-const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-console.log(image_hosting_key);
-const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
 const UpdateProfile = () => {
-  
-
-
-  const axiosSecure=useAxiosSecure();
-
+  const axiosSecure = useAxiosSecure();
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
+
   const {
     register,
+    handleSubmit,
+    reset,
     formState: { errors },
-    handleSubmit , reset
-    } = useForm();
+  } = useForm();
 
-    
-    const handleUpdate = async (ProfileData) => {
+  // Fetch existing profile data
+  useEffect(() => {
+    const fetchProfile = async () => {
       try {
-        const res = await axiosSecure.patch(`/carts/${id}`, ProfileData);
-        console.log('Response data:', res.data); // Log the entire response for inspection
-    
-        if (res.data.modifiedCount > 0) {
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Profile updated successfully',
-            showConfirmButton: false,
-            timer: 1500
+        const res = await axiosSecure.get(`/carts/${id}`);
+        if (res.data) {
+          // Set form default values
+          reset({
+            Age: res.data.age || "",
+            Phonenumber: res.data.phoneNumber || "",
           });
-          reset();
-        } else {
-          throw new Error('Failed to update profile');
         }
       } catch (error) {
-        console.error("Error updating profile:", error);
+        console.error("Failed to fetch profile:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Failed to load profile data!",
+        });
+      } finally {
+        setLoading(false);
       }
     };
+    fetchProfile();
+  }, [id, axiosSecure, reset]);
 
-    const onSubmit = async (data) =>{
-      
-     
-      console.log(data);
-
-      reset();
-     
-
-        const ProfileData = {
-          age: data.Age,
-          phoneNumber:data.Phonenumber
+  const handleUpdate = async (ProfileData) => {
+    try {
+      const res = await axiosSecure.patch(`/carts/${id}`, ProfileData);
+      if (res.data.modifiedCount > 0) {
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Profile updated successfully",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        reset(ProfileData); // keep updated data in form
+      } else {
+        throw new Error("Failed to update profile");
       }
-
-       await  handleUpdate(ProfileData);
-    
-
-     
-
-
-
-      
-
-
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong while updating your profile!",
+      });
     }
+  };
+
+  const onSubmit = async (data) => {
+    const ProfileData = {
+      age: data.Age,
+      phoneNumber: data.Phonenumber,
+    };
+    await handleUpdate(ProfileData);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-[#0A2540] text-lg">Loading profile...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className='p-20 min-h-screen bg-[#D6EDFF]'>
-    <div className="min-h-screen shadow-2xl border-emerald-800 rounded-lg p-10 space-y-4 ">
-  <div className="mb-10"> 
-  <h2 className="text-5xl text-black text-center font-bold  ">Update  <span className="text-green-800">Your Profile </span></h2>
-  </div>
-   <form
+    <div className="min-h-screen flex justify-center items-start p-6 md:p-12 ">
+      <div className="w-full max-w-3xl bg-white rounded-2xl p-10 space-y-8 shadow-xl">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-[#0A2540]">
+            Update <span className="text-[#26a6eb]">Your Profile</span>
+          </h1>
+          <p className="text-gray-500 mt-2">
+            Keep your details up-to-date to join health camps
+          </p>
+        </div>
 
-    onSubmit={handleSubmit(onSubmit)} 
-    
-    >
-   {/* form name and quantity row */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          {/* Age & Phone Number */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-[#0A2540] font-medium mb-2">Age</label>
+              <input
+                type="number"
+                placeholder="Enter your age"
+                {...register("Age", { required: true })}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#26a6eb] focus:border-[#26a6eb]"
+              />
+              {errors.Age && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Age is required
+                </span>
+              )}
+            </div>
 
-   <div className="md:flex md:gap-5 mb-8">
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl"> Age </span>
-     </label>
-    <label className="flex items-center gap-2">
+            <div>
+              <label className="block text-[#0A2540] font-medium mb-2">
+                Phone Number
+              </label>
+              <input
+                type="number"
+                placeholder="Enter your phone number"
+                {...register("Phonenumber", { required: true })}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#26a6eb] focus:border-[#26a6eb]"
+              />
+              {errors.Phonenumber && (
+                <span className="text-red-500 text-sm mt-1 block">
+                  Phone number is required
+                </span>
+              )}
+            </div>
+          </div>
 
-<input type="number" name="Age" className="input input-bordered w-full " placeholder="Age" 
-{...register("Age", { required: true })}
-/>
-</label>
+          <button
+            type="submit"
+            className="w-full bg-[#26a6eb] hover:bg-[#55baef] text-white font-bold py-3 rounded-xl transition-colors duration-300 text-lg"
+          >
+            Update Profile
+          </button>
+        </form>
+
+        <p className="text-center text-gray-400 text-sm mt-4">
+          * Your profile information will be used to register you in MediCamps health camps.
+        </p>
+      </div>
     </div>
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl">Phone Number </span>
-     </label>
-    <label className="flex items-center gap-2">
-
-<input type="number" name="phonenumber" className="input input-bordered w-full " placeholder="Phone number" 
-{...register("Phonenumber", { required: true })}
-/>
-</label>
-    </div>
-    </div>
-    
-    
-
-
-    
-   
-    
-
-  
-
-
-
-     {/* form category and details row */}
-     
-   
-
-    
-
-
-     {/* form  photo url row */}
-   
-
-    
-
-    
-
-     {/* <div className="form-control w-full my-16">
-                        <input {...register('image', { required: true })} type="file" className="file-input w-full "  placeholder="Image"/>
-                    </div> */}
-
-
-
-    
-   
-    
-    
-  
-   <input type="submit" value="Update Profile"  className="w-full px-2 py-2 text-2xl font-bold bg-green-800 rounded-lg text-white"
-  
-   />
-   
-
-   </form>
- </div>
-  </div>
   );
 };
 

@@ -7,6 +7,7 @@ import Banner from "./Banner";
 import Doctors from "./Doctors/Doctors";
 import HomeAvailableCamps from "./HomeAvailableCamps/HomeAvailableCamps";
 import Testimonial from "./Testimonials/Testimonial";
+import Faq from "./Faq/Faq";
 
 const Home = () => {
   useEffect(() => {
@@ -23,10 +24,15 @@ const Home = () => {
       <div data-aos="fade-right" data-aos-duration="1500">
         <AboutUs />
       </div>
+   
       <div data-aos="fade-up" data-aos-duration="2000">
         <HomeAvailableCamps />
       </div>
-      <div data-aos="zoom-in" data-aos-duration="2500">
+         <div data-aos="fade-right" data-aos-duration="1500">
+        <Faq />
+      </div>
+
+0      <div data-aos="zoom-in" data-aos-duration="2500">
         <Testimonial />
       </div>
       <div data-aos="flip-left" data-aos-duration="3000">

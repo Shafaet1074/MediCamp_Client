@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { MdDelete } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import Swal from "sweetalert2";
@@ -12,76 +11,67 @@ const ManageCamps = () => {
   const [editCamp, setEditCamp] = useState(null);
 
   const { refetch, data: managecamps = [] } = useQuery({
-    queryKey: ['managecamps'],
+    queryKey: ["managecamps"],
     queryFn: async () => {
-      const res = await axiosSecure.get('/camps');
+      const res = await axiosSecure.get("/camps");
       return res.data;
-    }
+    },
   });
 
   const handleUpdate = async (updatedCamp) => {
     try {
-      const res = await axiosSecure.put(`/camps/${updatedCamp._id}`, updatedCamp);
+      const res = await axiosSecure.put(
+        `/camps/${updatedCamp._id}`,
+        updatedCamp
+      );
       if (res.data) {
         refetch();
         closeModal();
         Swal.fire({
-          title: "Updated!",
-          text: "Camp details have been updated.",
-          icon: "success"
+          title: "Success!",
+          text: "Camp updated successfully.",
+          icon: "success",
         });
       }
     } catch (error) {
-      console.error("Error updating camp:", error);
-      Swal.fire({
-        title: "Error!",
-        text: "There was an issue updating the camp details.",
-        icon: "error"
-      });
+      Swal.fire("Error", "Failed to update camp!", "error");
     }
   };
 
   const handleDelete = async (id) => {
     Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
+      title: "Delete this camp?",
+      text: "This action cannot be undone.",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonColor: "#26a6eb",
+      cancelButtonColor: "#0A2540",
+      confirmButtonText: "Delete",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        try {
-          const res = await axiosSecure.delete(`/camps/${id}`);
-          if (res.data.deletedCount > 0) {
-            refetch();
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success"
-            });
-          }
-        } catch (error) {
-          console.error("Error deleting camp:", error);
+        const res = await axiosSecure.delete(`/camps/${id}`);
+        if (res.data.deletedCount > 0) {
+          refetch();
+          Swal.fire("Deleted!", "Camp has been removed.", "success");
         }
       }
     });
   };
 
-  const handleEdit = (camp) => {
+  const openModal = (camp) => {
     setEditCamp(camp);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
     setEditCamp(null);
+    setIsModalOpen(false);
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const form = event.target;
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+
     const updatedCamp = {
       _id: editCamp._id,
       campname: form.campname.value,
@@ -90,100 +80,165 @@ const ManageCamps = () => {
       Location: form.Location.value,
       HealthcareProfessionalName: form.HealthcareProfessionalName.value,
       ParticipantCount: form.ParticipantCount.value,
-      Description: form.Description.value
+      Description: form.Description.value,
     };
+
     handleUpdate(updatedCamp);
   };
 
   return (
-    <div className="bg-[#D6EDFF] p-10 min-h-screen">
-      <h2 className="lg:text-5xl text-xl text-black text-center pb-10 font-bold">Manage Your <span className="text-green-800">Medical Camp</span></h2>
-      <div className="overflow-x-auto">
-        <table className="table text-xl bg-green-800 text-white rounded-lg">
-          <thead className="text-white text-2xl">
+    <div className="min-h-screen ">
+      <h2 className="text-3xl font-bold text-center text-[#0A2540] pb-8">
+        Manage <span className="text-[#26a6eb]">Medical Camps</span>
+      </h2>
+
+      {/* Desktop Table */}
+      <div className="hidden md:block overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
+        <table className="table w-full bg-white rounded-xl shadow-lg">
+          <thead className="bg-[#26a6eb] text-white text-lg">
             <tr>
-              <th></th>
-              <th>Name</th>
+              <th>#</th>
+              <th>Camp Name</th>
               <th>Date & Time</th>
               <th>Location</th>
-              <th>HealthCare Professional</th>
-              <th>Action</th>
+              <th>Healthcare Professional</th>
+              <th className="text-center">Action</th>
             </tr>
           </thead>
+
           <tbody>
             {managecamps.map((camp, index) => (
-              <tr key={camp._id}>
-                <th>{index + 1}</th>
-                <td>{camp.campname}</td>
+              <tr key={camp._id} className="hover:bg-[#F3FAFF] transition">
+                <td>{index + 1}</td>
+                <td className="font-semibold">{camp.campname}</td>
                 <td>{camp.DateTime}</td>
                 <td>{camp.Location}</td>
                 <td>{camp.HealthcareProfessionalName}</td>
-                <th>
-                  <div className="flex flex-row gap-2">
-                    <button onClick={() => handleDelete(camp._id)} className="btn btn-ghost btn-lg">
+                <td>
+                  <div className="flex justify-center gap-3 text-2xl">
+                    <button
+                      onClick={() => handleDelete(camp._id)}
+                      className="text-red-600 hover:text-red-800"
+                    >
                       <MdDelete />
                     </button>
-                    <button onClick={() => handleEdit(camp)} className="btn btn-ghost btn-lg">
+                    <button
+                      onClick={() => openModal(camp)}
+                      className="text-[#26a6eb] hover:text-[#0A2540]"
+                    >
                       <FaRegEdit />
                     </button>
                   </div>
-                </th>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {managecamps.map((camp) => (
+          <div
+            key={camp._id}
+            className="bg-white shadow-md rounded-xl p-4 border border-[#D6EDFF]"
+          >
+            <h3 className="text-xl font-bold text-[#0A2540]">
+              {camp.campname}
+            </h3>
+
+            <p className="text-sm text-gray-600 mt-1">
+              <strong>Date:</strong> {camp.DateTime}
+            </p>
+            <p className="text-sm text-gray-600">
+              <strong>Location:</strong> {camp.Location}
+            </p>
+            <p className="text-sm text-gray-600">
+              <strong>Doctor:</strong> {camp.HealthcareProfessionalName}
+            </p>
+
+            <div className="flex justify-end gap-4 text-2xl mt-3">
+              <button
+                onClick={() => handleDelete(camp._id)}
+                className="text-red-600"
+              >
+                <MdDelete />
+              </button>
+              <button
+                onClick={() => openModal(camp)}
+                className="text-[#26a6eb]"
+              >
+                <FaRegEdit />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Modal */}
       {isModalOpen && (
-        <dialog open className="modal" id="my_modal_1">
-          <div className="modal-box">
-            <h3 className="font-bold text-lg">Edit Camp</h3>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="label">
-                  <span className="label-text text-xl">Camp Name</span>
-                </label>
-                <input type="text" name="campname" className="input input-bordered w-full" defaultValue={editCamp.campname} />
-              </div>
-              <div>
-                <label className="label">
-                  <span className="label-text text-xl">Image</span>
-                </label>
-                <input type="text" name="image" className="input input-bordered w-full" defaultValue={editCamp.image} />
-              </div>
-              <div>
-                <label className="label">
-                  <span className="label-text text-xl">Camp Fees</span>
-                </label>
-                <input type="text" name="campfees" className="input input-bordered w-full" defaultValue={editCamp.campfees} />
-              </div>
-              <div>
-                <label className="label">
-                  <span className="label-text text-xl">Location</span>
-                </label>
-                <input type="text" name="Location" className="input input-bordered w-full" defaultValue={editCamp.Location} />
-              </div>
-              <div>
-                <label className="label">
-                  <span className="label-text text-xl">Healthcare Professional</span>
-                </label>
-                <input type="text" name="HealthcareProfessionalName" className="input input-bordered w-full" defaultValue={editCamp.HealthcareProfessionalName} />
-              </div>
-              <div>
-                <label className="label">
-                  <span className="label-text text-xl">Participant Count</span>
-                </label>
-                <input type="text" name="ParticipantCount" className="input input-bordered w-full" defaultValue={editCamp.ParticipantCount} />
-              </div>
-              <div className="col-span-2">
-                <label className="label">
-                  <span className="label-text text-xl">Description</span>
-                </label>
-                <textarea name="Description" className="textarea textarea-bordered w-full" rows="5" defaultValue={editCamp.Description}></textarea>
-              </div>
-              <div className="modal-action col-span-2">
-                <button type="button" className="btn" onClick={closeModal}>Close</button>
-                <input type="submit" value="Update" className="btn btn-primary" />
+        <dialog open className="modal">
+          <div className="modal-box max-w-3xl bg-white shadow-xl rounded-xl">
+            <h3 className="text-xl font-bold text-[#0A2540] mb-4">
+              Edit Camp Details
+            </h3>
+
+            <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-4">
+              <input
+                type="text"
+                name="campname"
+                defaultValue={editCamp.campname}
+                className="input input-bordered w-full"
+              />
+              <input
+                type="text"
+                name="image"
+                defaultValue={editCamp.image}
+                className="input input-bordered w-full"
+              />
+              <input
+                type="text"
+                name="campfees"
+                defaultValue={editCamp.campfees}
+                className="input input-bordered w-full"
+              />
+              <input
+                type="text"
+                name="Location"
+                defaultValue={editCamp.Location}
+                className="input input-bordered w-full"
+              />
+              <input
+                type="text"
+                name="HealthcareProfessionalName"
+                defaultValue={editCamp.HealthcareProfessionalName}
+                className="input input-bordered w-full"
+              />
+              <input
+                type="text"
+                name="ParticipantCount"
+                defaultValue={editCamp.ParticipantCount}
+                className="input input-bordered w-full"
+              />
+
+              <textarea
+                name="Description"
+                rows="4"
+                defaultValue={editCamp.Description}
+                className="textarea textarea-bordered md:col-span-2"
+              ></textarea>
+
+              <div className="modal-action md:col-span-2">
+                <button
+                  onClick={closeModal}
+                  type="button"
+                  className="btn bg-gray-300 text-black"
+                >
+                  Cancel
+                </button>
+                <button className="btn bg-[#26a6eb] hover:bg-[#55baef] text-white">
+                  Update
+                </button>
               </div>
             </form>
           </div>

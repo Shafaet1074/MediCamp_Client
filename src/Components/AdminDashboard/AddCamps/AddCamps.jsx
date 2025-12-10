@@ -1,199 +1,193 @@
 import { useForm } from "react-hook-form";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
-import Swal from "sweetalert2";
 import useAxiosPublic from "../../../Hooks/USeAxiosPublic";
+import Swal from "sweetalert2";
 import { useContext } from "react";
 import { AuthContext } from "../../Providers/AuthProviders";
 
-
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-console.log(image_hosting_key);
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
+
 const AddCamps = () => {
-
   const axiosPublic = useAxiosPublic();
-
-  const axiosSecure=useAxiosSecure();
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
- 
+
   const {
     register,
+    handleSubmit,
     formState: { errors },
-    handleSubmit , reset
-    } = useForm();
+    reset,
+  } = useForm();
 
-    const onSubmit = async (data) =>{
-      const imageFile = { image: data.image[0] }
-        const res = await axiosPublic.post(image_hosting_api, imageFile, {
-            headers: {
-                'content-type': 'multipart/form-data'
-            }
+  const onSubmit = async (data) => {
+    const imageFile = { image: data.image[0] };
+    const res = await axiosPublic.post(image_hosting_api, imageFile, {
+      headers: { "content-type": "multipart/form-data" },
+    });
+
+    if (res.data.success) {
+      const CampsItem = {
+        campname: data.CampName,
+        DateTime: data.DateTime,
+        Description: data.Description,
+        campfees: data.campfees,
+        HealthcareProfessionalName: data.HealthcareProfessionalName,
+        Partcipantcount: data.Partcipantcount,
+        image: res.data.data.display_url,
+        Location: data.Location,
+        email: user?.email,
+      };
+
+      axiosSecure.post("/camps", CampsItem).then(() => {
+        Swal.fire({
+          icon: "success",
+          title: "Camp Added Successfully!",
+          confirmButtonColor: "#26a6eb",
         });
-      console.log(res.data);
-      console.log(data);
-      if (res.data.success) {
-        // now send the menu item data to the server with the image url
-        const CampsItem = {
-            campname: data.CampName,
-            DateTime: data.DateTime,
-            Description: data.Description,
-            campfees: data.campfees,
-            HealthcareProfessionalName: data.HealthcareProfessionalName,
-            Partcipantcount:data.Partcipantcount,
-            image: res.data.data.display_url,
-            Location:data.Location,
-            email:user?.email
-        }
-      
-
-      axiosSecure.post('/camps',CampsItem)
-        .then(res=>{
-          console.log(res.data);
-          reset();
-          Swal.fire("Added Camps ");
-    })
-  
-  }
-}
+        reset();
+      });
+    }
+  };
 
   return (
-    <div className='lg:p-20 p-2 min-h-screen bg-[#D6EDFF]'>
-    <div className="min-h-screen shadow-2xl border-emerald-800 rounded-lg p-10 space-y-4 ">
-  <div className="mb-10"> 
-  <h2 className="lg:text-5xl text-xl text-black text-center font-bold  ">Add New  <span className="text-green-800">Medical Camp</span></h2>
-  </div>
-   <form onSubmit={handleSubmit(onSubmit)} >
-   {/* form name and quantity row */}
-    <div className="md:flex md:gap-5 mb-8">
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl">Camp Name </span>
-     </label>
-    <label className="flex items-center gap-2">
+    <div className="min-h-screen  px-4 py-2">
+      <div className="  bg-white  rounded-2xl ">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h2 className="text-3xl md:text-3xl font-bold text-[#0A2540]">
+            Add New <span className="text-[#26a6eb]">Medical Camp</span>
+          </h2>
+          <p className="text-gray-500 mt-2 text-sm md:text-base">
+            Provide essential information to publish a new health camp on MediCamps.
+          </p>
+        </div>
 
-<input type="text" name="Camp Name" className="input input-bordered w-full " placeholder="Camp Name" 
-{...register("CampName", { required: true })}
-/>
-</label>
+        {/* FORM */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+
+          {/* GRID ROW 1 */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Camp Name */}
+            <div>
+              <label className="text-sm font-semibold text-[#0A2540]">
+                Camp Name
+              </label>
+              <input
+                type="text"
+                {...register("CampName", { required: true })}
+                placeholder="Enter camp name"
+                className="mt-1 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#26a6eb] outline-none"
+              />
+            </div>
+
+            {/* Date & Time */}
+            <div>
+              <label className="text-sm font-semibold text-[#0A2540]">
+                Date & Time
+              </label>
+              <input
+                type="text"
+                {...register("DateTime", { required: true })}
+                placeholder="DD/MM/YYYY - Time"
+                className="mt-1 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#26a6eb] outline-none"
+              />
+            </div>
+          </div>
+
+          {/* GRID ROW 2 */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Camp Fees */}
+            <div>
+              <label className="text-sm font-semibold text-[#0A2540]">
+                Camp Fees
+              </label>
+              <input
+                type="text"
+                {...register("campfees", { required: true })}
+                placeholder="Enter fee"
+                className="mt-1 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#26a6eb] outline-none"
+              />
+            </div>
+
+            {/* Location */}
+            <div>
+              <label className="text-sm font-semibold text-[#0A2540]">
+                Location
+              </label>
+              <input
+                type="text"
+                {...register("Location", { required: true })}
+                placeholder="Enter location"
+                className="mt-1 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#26a6eb] outline-none"
+              />
+            </div>
+          </div>
+
+          {/* GRID ROW 3 */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Healthcare Professional Name */}
+            <div>
+              <label className="text-sm font-semibold text-[#0A2540]">
+                Healthcare Professional
+              </label>
+              <input
+                type="text"
+                {...register("HealthcareProfessionalName", { required: true })}
+                placeholder="Doctor / Specialist name"
+                className="mt-1 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#26a6eb] outline-none"
+              />
+            </div>
+
+            {/* Participant Count */}
+            <div>
+              <label className="text-sm font-semibold text-[#0A2540]">
+                Participant Count
+              </label>
+              <input
+                type="number"
+                {...register("Partcipantcount", { required: true })}
+                placeholder="Expected participants"
+                className="mt-1 w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-[#26a6eb] outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <label className="text-sm font-semibold text-[#0A2540]">
+              Description
+            </label>
+            <textarea
+              {...register("Description", { required: true })}
+              rows="5"
+              placeholder="Write a brief description about this camp..."
+              className="mt-1 w-full p-4 border rounded-xl focus:ring-2 focus:ring-[#26a6eb] outline-none"
+            ></textarea>
+          </div>
+
+          {/* Image Upload */}
+          <div>
+            <label className="text-sm font-semibold text-[#0A2540]">
+              Upload Camp Banner
+            </label>
+            <input
+              type="file"
+              {...register("image", { required: true })}
+              className="mt-2 w-full p-3 border rounded-xl bg-gray-50 cursor-pointer"
+            />
+          </div>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="w-full py-3 text-xl font-bold rounded-xl text-white bg-gradient-to-r from-[#26a6eb] to-[#55baef] hover:opacity-90 transition"
+          >
+            Add Camp
+          </button>
+        </form>
+      </div>
     </div>
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl">Date & Time </span>
-     </label>
-    <label className="flex items-center gap-2">
-
-<input type="text" name="Date&Time" className="input input-bordered w-full " placeholder="Camp Fees" 
-{...register("DateTime", { required: true })}
-/>
-</label>
-    </div>
-    </div>
-
-    <div className="md:flex md:gap-5 mb-8">
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl">Camp Fees </span>
-     </label>
-    <label className="flex items-center gap-2">
-
-<input type="text" name="Camp Fees" className="input input-bordered w-full " placeholder="Camp Fees" 
-{...register("campfees", { required: true })}
-/>
-</label>
-    </div>
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl">Location</span>
-     </label>
-    <label className="flex items-center gap-2">
-
-<input type="text" name="Location" className="input input-bordered w-full " placeholder="Location" 
-{...register("Location", { required: true })}
-/>
-</label>
-    </div>
-    </div>
-    <div className="md:flex md:gap-5 mb-8">
-    
-   
-    </div>
-
-    <div className="md:flex md:gap-5 mb-8">
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl">Healthcare Professional Name </span>
-     </label>
-    <label className="flex items-center gap-2">
-
-<input type="text" name="Healthcare Professional Name" className="input input-bordered w-full " placeholder="Healthcare Professional Name" 
-{...register("HealthcareProfessionalName", { required: true })}
-/>
-</label>
-    </div>
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl">Participant count</span>
-     </label>
-    <label className="flex items-center gap-2">
-
-<input type="text" name="Participant count" className="input input-bordered w-full " placeholder="Participant count"
-{...register("Partcipantcount", { required: true })}
-/>
-</label>
-    </div>
-
-
-    </div>
-
-
-
-     {/* form category and details row */}
-     
-   
-
-    
-
-
-     {/* form  photo url row */}
-   
-
-    
-
-    
-
-     <div className="form-control w-full my-16">
-                        <input {...register('image', { required: true })} type="file" className="file-input w-full "  placeholder="Image"/>
-                    </div>
-
-   <div className="mb-8">
-    <div className="md:w-1/2">
-     <label className="label">
-     <span className="label-text text-xl"> Description</span>
-     </label>
-    <label className="flex items-center gap-2">
-
-{/* <input type="text" name="ShortDescription" className="input input-bordered w-full " placeholder="Short Description" /> */}
-<textarea name="Description" id="" cols="70"  rows="5"
- {...register("Description", { required: true })}
-></textarea>
-</label>
-    </div>
-   
-    </div>
-
-    
-   
-    
-    
-  
-   <input type="submit" value="Add Camps"  className="w-full px-2 py-2 text-2xl font-bold bg-green-800 rounded-lg text-white"
-  
-   />
-   
-
-   </form>
- </div>
-  </div>
   );
 };
 

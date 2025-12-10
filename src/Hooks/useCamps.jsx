@@ -10,12 +10,13 @@ import { useContext } from "react";
 const useCamps = () => {
     const axiosSecure = useAxiosSecure();
     const {user} =useContext(AuthContext);
+    console.log('user :>> ', user.email);
     console.log(user.email);
 
     const { refetch, data: hookcamps = [] } = useQuery({
         queryKey: ['campshook'],
         queryFn: async() => {
-            const res = await axiosSecure.get(`/carts?email=${user.email}`);
+           const res = await axiosSecure.get(`/carts/${user.email}`);
             return res.data;
         }
         

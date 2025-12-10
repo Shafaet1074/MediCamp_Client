@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
           errorElement:<ErrorPage></ErrorPage>,
       }, 
       {
-        path:'/avalilablecamps',
+        path:'/availablecamps',
         element:<AvailableCamps></AvailableCamps>,
 
       },

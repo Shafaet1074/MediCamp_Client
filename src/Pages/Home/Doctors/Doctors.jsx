@@ -11,23 +11,23 @@ import { Navigation, Pagination, Scrollbar } from "swiper/modules";
 
 const Doctors = () => {
   const { data: doctors } = useQuery({
-    queryKey: ['featuredoctors'],
+    queryKey: ["featuredoctors"],
     queryFn: async () => {
-      const res = await fetch('/public.json');
+      const res = await fetch("/public.json");
       return res.json();
-    }
+    },
   });
 
   console.log(doctors);
 
   return (
     <div>
-      <div className="lg:text-center lg:space-y-4 pt-5">
-        <h2 className="lg:text-5xl text-xl text-black lg:text-center font-bold pt-5">
-          Meet Our <span className="text-green-800">Expert Doctors</span>
+      <div className="text-center lg:space-y-4 space-y-2 pt-5 ">
+        <h2 className="text-3xl  text-black lg:text-center font-bold pt-5">
+          Our <span className="text-[#26a6eb]">Expert Doctors</span>
         </h2>
-        <p className="text-xl lg:text-3xl font-extralight text-gray-900">
-          Explore the expertise of our distinguished medical professionals who lead the way in ensuring your well-being.
+        <p className="text-sm text-center lg:text-2xl font-extralight text-gray-900">
+          Explore the expertise of our medical professionals.
         </p>
       </div>
       <div className="p-10">
