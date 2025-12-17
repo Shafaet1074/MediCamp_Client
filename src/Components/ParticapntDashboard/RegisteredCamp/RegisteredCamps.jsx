@@ -5,6 +5,7 @@ import { AuthContext } from "../../Providers/AuthProviders";
 import { FaTrashAlt } from "react-icons/fa";
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import { axiosPublic } from "../../../Hooks/USeAxiosPublic";
 
 const RegisteredCamps = () => {
   const [hookcamps, refetch] = useCamps();
@@ -98,52 +99,70 @@ const RegisteredCamps = () => {
   };
 
   // ---------- Payment flow ----------
-  const handlePayNow = async (camp) => {
-    if (!user) {
+const handlePayNow = async (camp) => {
+  if (!user) {
+    Swal.fire({
+      title: "Login required",
+      text: "Please log in before making a payment.",
+      icon: "info",
+      confirmButtonColor: "#26a6eb",
+    });
+    return;
+  }
+
+  setLoadingCampId(camp._id);
+
+  try {
+    // Prepare payload
+  const payload = {
+  CampFees: Number(camp.campfees),
+  CampName: camp.campname || "Camp",
+  name: user.displayName || user.email,
+  email: user.email,
+  phone: "01700000000",
+  address: "Dhaka, Bangladesh",
+  tranId: `${camp._id}_${Date.now()}`,
+  campId: camp._id,
+};
+
+
+    console.log("Payment payload:", payload); // Debug
+
+    // Call your backend to initiate SSLCommerz
+   const res = await axiosPublic.post("/ssl/initiate", payload);
+
+
+    const { url } = res?.data || {};
+
+    if (!url) {
       Swal.fire({
-        title: "Login required",
-        text: "Please log in before making a payment.",
-        icon: "info",
+        title: "Payment Error",
+        text: "Unable to create SSL session. Please try again.",
+        icon: "error",
         confirmButtonColor: "#26a6eb",
       });
       return;
     }
 
-    setLoadingCampId(camp._id);
+    // Redirect user to SSLCommerz payment page
+    window.location.href = url;
 
-    try {
-  const res = await axiosSecure.post("/ssl/initiate", {
-  amount: camp.campfees,
-  campname: camp.campname,
-  name: user.displayName,
-  email: user.email,
-  phone: "01700000000", // required by SSLCommerz
-  address: "Dhaka, Bangladesh", // required
-  tranId: `${camp._id}_${Date.now()}`, // required unique ID
-  campId: camp._id,
-});
+  } catch (err) {
+    console.error("Payment creation error:", err);
+
+    // Display friendly error to user
+    Swal.fire({
+      title: "Error",
+      text: err?.response?.data?.message || "Payment could not be initialized.",
+      icon: "error",
+      confirmButtonColor: "#26a6eb",
+    });
+  } finally {
+    setLoadingCampId(null);
+  }
+};
 
 
-      
-      console.log(res.data);
-      const { url } = res?.data || {};
-
-      
-      if (!url) {
-        Swal.fire("Payment Error", "Unable to create SSL session", "error");
-        return;
-      }
-
-      // Redirect to SSLCommerz in the same tab
-      window.location.href = url;
-
-    } catch (err) {
-      console.error("Payment creation error:", err);
-      Swal.fire("Error", "Payment could not be initialized.", "error");
-    } finally {
-      setLoadingCampId(null);
-    }
-  };
 
   // ---------- UI ----------
   return (

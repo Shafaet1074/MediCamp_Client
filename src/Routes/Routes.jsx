@@ -20,6 +20,7 @@ import Analytics from "../Components/ParticapntDashboard/Analytics/Analytics";
 import ManageRegister from "../Components/AdminDashboard/ManageRegister/ManageRegister";
 import Campdetails from "../Components/CampDetails/Campdetails";
 import ErrorPage from "../Components/ErrorPage/ErrorPage";
+import PaymentSuccess from "../Components/ParticapntDashboard/Payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -54,6 +55,10 @@ export const router = createBrowserRouter([
         path:'signup',
         element:<Signup></Signup>,
       },
+      {
+        path:"/payment-success" ,
+        element:<PaymentSuccess />
+      }
 
 
     ]

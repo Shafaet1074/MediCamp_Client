@@ -20,7 +20,9 @@ const UpdateProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const res = await axiosSecure.get(`/carts/${id}`);
+        const res = await axiosSecure.get(`/carts/item/${id}`);
+
+        console.log(res.data)
         if (res.data) {
           // Set form default values
           reset({
@@ -42,30 +44,37 @@ const UpdateProfile = () => {
     fetchProfile();
   }, [id, axiosSecure, reset]);
 
-  const handleUpdate = async (ProfileData) => {
-    try {
-      const res = await axiosSecure.patch(`/carts/${id}`, ProfileData);
-      if (res.data.modifiedCount > 0) {
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Profile updated successfully",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        reset(ProfileData); // keep updated data in form
-      } else {
-        throw new Error("Failed to update profile");
-      }
-    } catch (error) {
-      console.error("Error updating profile:", error);
+ const handleUpdate = async (ProfileData) => {
+  try {
+    const res = await axiosSecure.patch(`/carts/${id}`, ProfileData);
+    if (res.data.modifiedCount > 0) {
       Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Something went wrong while updating your profile!",
+        position: "top-end",
+        icon: "success",
+        title: "Profile updated successfully",
+        showConfirmButton: false,
+        timer: 1500,
       });
+      // Refetch data
+     const updated = await axiosSecure.get(`/carts/item/${id}`);
+
+      reset({
+        Age: updated.data.age || "",
+        Phonenumber: updated.data.phoneNumber || "",
+      });
+    } else {
+      throw new Error("Failed to update profile");
     }
-  };
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Something went wrong while updating your profile!",
+    });
+  }
+};
+
 
   const onSubmit = async (data) => {
     const ProfileData = {

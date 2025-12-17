@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../Components/Providers/AuthProviders";
 
 export const axiosSecure = axios.create({
-  baseURL: "http://localhost:5005",
+  baseURL: " https://medicamp-server-dusky.vercel.app",
 });
 
 const useAxiosSecure = () => {

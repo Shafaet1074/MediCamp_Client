@@ -89,38 +89,50 @@ const ManageRegister = () => {
     });
   };
 
-  const handleConfirm = (id) => {
-    Swal.fire({
-      title: "Confirm registration?",
-      text: "This will mark registration as confirmed.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonColor: "#26a6eb",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Confirm",
-    }).then(async (result) => {
-      if (!result.isConfirmed) return;
-      try {
-        setActionLoadingId(id);
-        const res = await axiosSecure.patch(`/carts/${id}`, {
-          confirmationStatus: "confirmed",
+ const handleConfirm = (id) => {
+  Swal.fire({
+    title: "Confirm registration?",
+    text: "This will mark the registration as confirmed.",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#26a6eb",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Confirm",
+  }).then(async (result) => {
+    if (!result.isConfirmed) return;
+
+    try {
+      setActionLoadingId(id);
+
+      // 1️⃣ Update cart confirmation
+      const res = await axiosSecure.patch(`/carts/${id}`, {
+        confirmationStatus: "confirmed",
+      });
+
+      // 2️⃣ Also update payment based on campId
+      await axiosSecure.patch(`/payments/by-camp/${id}`, {
+      
+        confirmationStatus: "confirmed",
+      });
+
+
+      if (res.data.modifiedCount > 0) {
+        await refetch();
+        Swal.fire({
+          title: "Confirmed",
+          text: "Registration & payment updated successfully.",
+          icon: "success",
+          confirmButtonColor: "#26a6eb",
         });
-        if (res.data.modifiedCount > 0) {
-          await refetch();
-          Swal.fire({
-            title: "Confirmed",
-            text: "Registration confirmed successfully.",
-            icon: "success",
-            confirmButtonColor: "#26a6eb",
-          });
-        }
-      } catch (err) {
-        Swal.fire("Error", "Could not confirm registration.", "error");
-      } finally {
-        setActionLoadingId(null);
       }
-    });
-  };
+    } catch (err) {
+      Swal.fire("Error", "Could not confirm registration.", "error");
+    } finally {
+      setActionLoadingId(null);
+    }
+  });
+};
+
 
   // small helper for badge classes
   const badgeClassForPayment = (status) =>
