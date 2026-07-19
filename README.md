@@ -4,6 +4,11 @@
 
 This project is a comprehensive web application designed to manage medical camps. It features user authentication, dynamic camp listings, detailed camp information, and dashboards for both organizers and participants. The application provides a seamless experience for users to register for camps, view feedback, and manage their profiles.
 
+## Demo Access / Admin Credentials
+To explore the Organizer Dashboard and admin features, you can log in using the following test credentials:
+- **Email:** ad@gmail.com
+- **Password:** adadad
+
 ## Main Features
 
 ### Home Page
@@ -84,4 +89,3 @@ Feel free to fork this repository and make contributions. Pull requests are welc
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
-
